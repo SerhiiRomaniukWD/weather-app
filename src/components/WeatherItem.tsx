@@ -27,8 +27,6 @@ export const WeatherItem: FC = () => {
 			if (weather) {
 				setCurrWeather(weather);
 			}
-
-			//console.log(weather);
 		};
 
 		fetchWeather();
@@ -36,7 +34,7 @@ export const WeatherItem: FC = () => {
 
 	return (
 		<ItemLayout>
-			<div>{currWeather?.temperature}</div>
+			<div>{currWeather?.weather[0].main}</div>
 		</ItemLayout>
 	);
 };
