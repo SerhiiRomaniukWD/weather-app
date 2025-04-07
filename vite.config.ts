@@ -27,6 +27,10 @@ export default defineConfig({
 			"@": resolve(root, "../"),
 			// ASSETS
 			"@icons": resolve(root, "assets/icons"),
+			// ASSETS
+			"@services": resolve(root, "services/"),
+			// TYPES
+			"@types": resolve(root, "types/"),
 		} as AliasOptions,
 	},
 });
