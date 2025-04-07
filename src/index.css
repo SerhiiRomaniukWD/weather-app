@@ -1,1 +1,9 @@
+/* Fonts */
+@import "./assets/fonts/_fonts.css";
+
+/* Tailwindcss */
 @import "tailwindcss";
+
+@theme {
+	--font-rubik: "Rubik", sans-serif;
+}
