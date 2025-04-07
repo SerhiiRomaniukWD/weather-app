@@ -12,11 +12,7 @@ export const ThemeToggler: FC = () => {
 	};
 
 	return (
-		<button
-			className="cursor-pointer p-1 border-2 border-solid rounded-sm"
-			onClick={toggleTheme}
-			type="button"
-		>
+		<button className="cursor-pointer p-1" onClick={toggleTheme} type="button">
 			{isDarkMode ? <MoonIcon /> : <SunIcon />}
 		</button>
 	);
