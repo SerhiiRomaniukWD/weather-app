@@ -11,7 +11,7 @@ type Props = {
 
 export const SuggestionsList: FC<Props> = ({ suggestions, chooseCity }) => {
 	return (
-		<ItemLayout className="!absolute top-[64px] left-0 w-full">
+		<ItemLayout className="!absolute top-[64px] left-0 w-full z-50">
 			<ul className="flex flex-col gap-2">
 				{suggestions.map((sugCity, index) => (
 					<li

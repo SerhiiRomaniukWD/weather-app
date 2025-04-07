@@ -2,12 +2,12 @@ import { FC, FormEvent, useEffect, useMemo, useState } from "react";
 
 import { GeoService } from "../services/GeoService.ts";
 import { CitySuggestion } from "../types/geo.ts";
+import { useCityStore } from "../store/cityStore.ts";
 
 import LocationIcon from "@icons/location.svg";
 
 import { ItemLayout } from "./ItemLayout";
 import { SuggestionsList } from "./SuggestionsList";
-import { useCityStore } from "../store/cityStore.ts";
 
 export const SearchBar: FC = () => {
 	const city = useCityStore((state) => state.city);
