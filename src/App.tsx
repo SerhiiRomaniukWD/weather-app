@@ -1,7 +1,7 @@
 import { Header } from "./components/Header";
 import { MainLayout } from "./components/MainLayout";
 import { SearchBar } from "./components/SearchBar";
-import { WeatherItem } from "./components/WeatherItem";
+import { WeatherGuard } from "./components/WeatherGuard";
 
 function App() {
 	return (
@@ -10,7 +10,7 @@ function App() {
 
 			<SearchBar />
 
-			<WeatherItem />
+			<WeatherGuard />
 		</MainLayout>
 	);
 }
