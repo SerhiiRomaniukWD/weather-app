@@ -4,12 +4,15 @@
 /* Tailwindcss */
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
 	/* colors */
 	--color-black: #202020;
 	--color-main-bg: #f0f4f5;
-	--color-main-bg: #f0f4f5;
-	--color-item-light: #d3dee3;
+	--color-item-light: #F1EFEC;
+	--color-item-dark: #323233;
+	--color-text-grey: #616161;
 
 	/* fonts */
 	--font-rubik: "Rubik", sans-serif;

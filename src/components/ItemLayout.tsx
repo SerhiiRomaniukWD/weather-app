@@ -5,5 +5,9 @@ type Props = {
 };
 
 export const ItemLayout: FC<Props> = ({ children }) => {
-	return <div className="bg-item-light p-3 rounded-lg">{children}</div>;
+	return (
+		<div className="bg-item-light dark:bg-item-dark p-3 rounded-lg">
+			{children}
+		</div>
+	);
 };
