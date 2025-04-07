@@ -1,44 +1,48 @@
 import { FC, FormEvent, useEffect, useMemo, useState } from "react";
 
-import { GeoService } from "@services/GeoService.ts";
-import { CitySuggestion } from "@types/geo.ts";
+import { GeoService } from "../services/GeoService.ts";
+import { CitySuggestion } from "../types/geo.ts";
 
 import LocationIcon from "@icons/location.svg";
 
 import { ItemLayout } from "./ItemLayout";
 import { SuggestionsList } from "./SuggestionsList";
+import { useCityStore } from "../store/cityStore.ts";
 
 export const SearchBar: FC = () => {
-	const [city, setCity] = useState("");
+	const city = useCityStore((state) => state.city);
+	const [cityInput, setCityInput] = useState(`${city?.name}, ${city?.country}`);
 	const [suggestions, setSuggestions] = useState<CitySuggestion[]>([]);
-	const [isCitySelected, setIsCitySelected] = useState(false);
+	const setCity = useCityStore((state) => state.setCity);
 
 	const geoService = useMemo(() => new GeoService(), []);
 
 	const handleChange = (e: FormEvent<HTMLInputElement>) => {
-		setIsCitySelected(false);
-		setCity(e.currentTarget.value);
+		setCity(null);
+		setCityInput(e.currentTarget.value);
 	};
 	const handleChooseCity = (city: CitySuggestion) => {
+		const cityFullName = `${city.name}, ${city.country}`;
+
 		setSuggestions([]);
-		setIsCitySelected(true);
-		setCity(`${city.name}, ${city.country}`);
+		setCity(city);
+		setCityInput(cityFullName);
 	};
 
 	useEffect(() => {
 		const fetchCitySuggestions = async () => {
-			if (city.trim().length < 2) {
+			if (cityInput.trim().length < 2) {
 				return;
 			}
 
-			if (!isCitySelected) {
-				const cities = await geoService.getCitySuggestions(city);
+			if (!city) {
+				const cities = await geoService.getCitySuggestions(cityInput);
 				setSuggestions(cities);
 			}
 		};
 
 		fetchCitySuggestions();
-	}, [city, geoService, isCitySelected]);
+	}, [cityInput, geoService, city]);
 
 	return (
 		<div className="relative h-fit">
@@ -54,7 +58,7 @@ export const SearchBar: FC = () => {
 							type="text"
 							placeholder="City name..."
 							onChange={handleChange}
-							value={city}
+							value={cityInput}
 						/>
 					</label>
 				</form>

@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 
-import { CitySuggestion } from "@types/geo.ts";
+import { CitySuggestion } from "../types/geo.ts";
 
 export class GeoService {
 	private axiosInstance: AxiosInstance;

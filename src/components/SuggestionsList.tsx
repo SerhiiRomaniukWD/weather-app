@@ -1,7 +1,8 @@
 import { FC } from "react";
 
+import { CitySuggestion } from "../types/geo";
+
 import { ItemLayout } from "./ItemLayout";
-import { CitySuggestion } from "@types/geo";
 
 type Props = {
 	suggestions: CitySuggestion[];
