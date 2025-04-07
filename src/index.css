@@ -9,8 +9,8 @@
 @theme {
 	/* colors */
 	--color-black: #202020;
-	--color-main-bg: #f0f4f5;
-	--color-item-light: #F1EFEC;
+	--color-light: #EEEEEE;
+	--color-item-light: #DDDDDD;
 	--color-item-dark: #323233;
 	--color-text-grey: #616161;
 

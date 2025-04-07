@@ -1,18 +1,13 @@
+import { Header } from "./components/Header";
 import { MainLayout } from "./components/MainLayout";
 import { SearchBar } from "./components/SearchBar";
 
 function App() {
-	const toggleTheme = () => {
-		document.documentElement.classList.toggle("dark");
-	};
-
 	return (
 		<MainLayout>
-			<SearchBar />
+			<Header />
 
-			<button type="button" className="cursor-pointer" onClick={toggleTheme}>
-				Theme
-			</button>
+			<SearchBar />
 		</MainLayout>
 	);
 }
