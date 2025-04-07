@@ -8,7 +8,19 @@ const root = resolve(__dirname, "src");
 
 // https://vite.dev/config/
 export default defineConfig({
-	plugins: [react(), tailwindcss(), svgr()],
+	plugins: [
+		react(),
+		tailwindcss(),
+		svgr({
+			svgrOptions: {
+				exportType: "default",
+				ref: true,
+				svgo: false,
+				titleProp: true,
+			},
+			include: "**/*.svg",
+		}),
+	],
 	resolve: {
 		alias: {
 			// ROOT

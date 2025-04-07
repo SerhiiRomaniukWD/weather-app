@@ -1,5 +1,8 @@
 import { FC, useState } from "react";
 
+import SunIcon from "@icons/sun.svg";
+import MoonIcon from "@icons/moon.svg";
+
 export const ThemeToggler: FC = () => {
 	const [isDarkMode, setIsDarkMode] = useState(false);
 
@@ -14,7 +17,7 @@ export const ThemeToggler: FC = () => {
 			onClick={toggleTheme}
 			type="button"
 		>
-			{isDarkMode ? "DARK" : "LIGHT"}
+			{isDarkMode ? <MoonIcon /> : <SunIcon />}
 		</button>
 	);
 };
