@@ -1,53 +1,44 @@
 import { FC, FormEvent, useEffect, useMemo, useState } from "react";
 
-import { GeoService } from "@services/GeoService";
-import { CitySuggestion } from "@types/geo";
-
-import { ItemLayout } from "./ItemLayout";
-import { SubmitBtn } from "./SubmitBtn";
+import { GeoService } from "@services/GeoService.ts";
+import { CitySuggestion } from "@types/geo.ts";
 
 import LocationIcon from "@icons/location.svg";
 
+import { ItemLayout } from "./ItemLayout";
+import { SuggestionsList } from "./SuggestionsList";
+
 export const SearchBar: FC = () => {
 	const [city, setCity] = useState("");
-	const [suggestions, setSuggestions] = useState<CitySuggestion[]>([
-		{
-			name: "Lutsk",
-			country: "Ukraine",
-			state: "Volyn Oblast",
-			lat: 50.7475,
-			lon: 25.3292,
-		},
-		{
-			name: "Lutsk",
-			country: "Ukraine",
-			state: "Volyn Oblast",
-			lat: 50.7475,
-			lon: 25.3292,
-		},
-	]);
+	const [suggestions, setSuggestions] = useState<CitySuggestion[]>([]);
+	const [isCitySelected, setIsCitySelected] = useState(false);
 
 	const geoService = useMemo(() => new GeoService(), []);
 
-	const isActive = city.length > 0;
-
 	const handleChange = (e: FormEvent<HTMLInputElement>) => {
+		setIsCitySelected(false);
 		setCity(e.currentTarget.value);
+	};
+	const handleChooseCity = (city: CitySuggestion) => {
+		setSuggestions([]);
+		setIsCitySelected(true);
+		setCity(`${city.name}, ${city.country}`);
 	};
 
 	useEffect(() => {
 		const fetchCitySuggestions = async () => {
 			if (city.trim().length < 2) {
-				setSuggestions([]);
 				return;
 			}
 
-			const cities = await geoService.getCitySuggestions(city);
-			setSuggestions(cities);
+			if (!isCitySelected) {
+				const cities = await geoService.getCitySuggestions(city);
+				setSuggestions(cities);
+			}
 		};
 
 		fetchCitySuggestions();
-	}, [city, geoService]);
+	}, [city, geoService, isCitySelected]);
 
 	return (
 		<div className="relative h-fit">
@@ -63,21 +54,17 @@ export const SearchBar: FC = () => {
 							type="text"
 							placeholder="City name..."
 							onChange={handleChange}
+							value={city}
 						/>
 					</label>
-
-					<SubmitBtn isActive={isActive} />
 				</form>
 			</ItemLayout>
 
 			{suggestions.length > 0 && (
-				<ItemLayout className="!absolute top-[64px] left-0 w-full">
-					<ul className="flex flex-col gap-2">
-						{suggestions.map((sugCity, index) => (
-							<li key={`${sugCity.name}_${index}`}>{sugCity.name}</li>
-						))}
-					</ul>
-				</ItemLayout>
+				<SuggestionsList
+					suggestions={suggestions}
+					chooseCity={handleChooseCity}
+				/>
 			)}
 		</div>
 	);
