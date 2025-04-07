@@ -1,5 +1,12 @@
+import { MainLayout } from "./components/MainLayout";
+import { SearchBar } from "./components/SearchBar";
+
 function App() {
-	return <h1 className="text-2xl font-rubik">Hello, World!</h1>;
+	return (
+		<MainLayout>
+			<SearchBar />
+		</MainLayout>
+	);
 }
 
 export default App;
