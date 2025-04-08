@@ -9,6 +9,7 @@ import LocationIcon from "@icons/location.svg";
 
 import { ItemLayout } from "./ItemLayout";
 import { SuggestionsList } from "./SuggestionsList";
+import { UpdateWeatherBtn } from "./UpdateWeatherBtn.tsx";
 
 export const SearchBar: FC = () => {
 	const city = useCityStore((state) => state.city);
@@ -60,6 +61,8 @@ export const SearchBar: FC = () => {
 							value={cityInput}
 						/>
 					</label>
+
+					<UpdateWeatherBtn />
 				</form>
 			</ItemLayout>
 

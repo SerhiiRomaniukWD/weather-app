@@ -8,7 +8,6 @@ interface WeatherStore {
 	updateDate: number | null;
 
 	setWeather: (weather: WeatherData | null) => void;
-	setUpdateDate: (date: number | null) => void;
 }
 
 export const useWeatherStore = create(
@@ -18,10 +17,8 @@ export const useWeatherStore = create(
 			updateDate: null,
 
 			setWeather: (weather: WeatherData | null) => {
+				set({ updateDate: Date.now() });
 				set({ weather });
-			},
-			setUpdateDate: (date: number | null) => {
-				set({ updateDate: date });
 			},
 		}),
 		{ name: "weather", storage: createJSONStorage(() => localStorage) }
