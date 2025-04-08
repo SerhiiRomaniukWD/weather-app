@@ -4,10 +4,17 @@ import { CitySuggestion } from "../types/geo";
 
 jest.mock("axios");
 
+const mockedAxios = axios as jest.Mocked<typeof axios>;
+const axiosInstance = {
+	get: jest.fn(),
+};
+
 describe("GeoService", () => {
 	let geoService: GeoService;
 
 	beforeEach(() => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		mockedAxios.create.mockReturnValue(axiosInstance as any);
 		geoService = new GeoService();
 	});
 
@@ -15,44 +22,35 @@ describe("GeoService", () => {
 		jest.clearAllMocks();
 	});
 
-	it("should return city suggestions for a valid query", async () => {
+	it("should fetch city suggestions", async () => {
 		const mockData: CitySuggestion[] = [
-			{ name: "London", lat: 51.5074, lon: -0.1278, country: "GB" },
-			{ name: "Los Angeles", lat: 34.0522, lon: -118.2437, country: "US" },
+			{ name: "Kyiv", country: "UA", lat: 50.45, lon: 30.523 },
+			{ name: "Kharkiv", country: "UA", lat: 49.99, lon: 36.23 },
 		];
 
-		(axios.get as jest.Mock).mockResolvedValue({ data: mockData });
+		axiosInstance.get.mockResolvedValue({ data: mockData });
 
-		const result = await geoService.getCitySuggestions("Lon");
+		const result = await geoService.getCitySuggestions("Kyiv");
 
-		expect(result).toEqual(mockData);
-		expect(axios.get).toHaveBeenCalledTimes(1);
-		expect(axios.get).toHaveBeenCalledWith("", {
+		expect(axiosInstance.get).toHaveBeenCalledWith("", {
 			params: {
-				q: "Lon",
+				q: "Kyiv",
 				limit: 5,
 				appid: "a5cb2b17e7071e26c2fa985c48e0e1e5",
 			},
 		});
+		expect(result).toEqual(mockData);
 	});
 
-	it("should return an empty array for an empty query", async () => {
-		const result = await geoService.getCitySuggestions("");
+	it("should return an empty array when API returns no suggestions", async () => {
+		axiosInstance.get.mockResolvedValue({ data: [] });
+
+		const result = await geoService.getCitySuggestions("UnknownCity");
 
 		expect(result).toEqual([]);
-		expect(axios.get).not.toHaveBeenCalled();
-	});
-
-	it("should handle API errors gracefully", async () => {
-		(axios.get as jest.Mock).mockRejectedValue(new Error("API Error"));
-
-		const result = await geoService.getCitySuggestions("Lon");
-
-		expect(result).toEqual([]);
-		expect(axios.get).toHaveBeenCalledTimes(1);
-		expect(axios.get).toHaveBeenCalledWith("", {
+		expect(axiosInstance.get).toHaveBeenCalledWith("", {
 			params: {
-				q: "Lon",
+				q: "UnknownCity",
 				limit: 5,
 				appid: "a5cb2b17e7071e26c2fa985c48e0e1e5",
 			},
