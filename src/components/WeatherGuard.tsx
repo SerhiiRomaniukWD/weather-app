@@ -19,17 +19,20 @@ export const WeatherGuard: FC = () => {
 				return;
 			}
 
-			if (!currWeather) {
-				const weather = await weatherService.getWeatherByCoordinates(
-					city.lat,
-					city.lon
-				);
+			const weather = await weatherService.getWeatherByCoordinates(
+				city.lat,
+				city.lon
+			);
 
-				setCurrWeather(weather);
-			}
+			setCurrWeather(weather);
 		};
 
-		fetchWeather();
+		if (
+			currWeather?.sys.country !== city?.country ||
+			currWeather?.name !== city?.name
+		) {
+			fetchWeather();
+		}
 	}, [city, weatherService, setCurrWeather, currWeather]);
 
 	if (!currWeather) {
