@@ -38,8 +38,12 @@ export const WeatherGuard: FC = () => {
 		}
 	}, [city, weatherService, setCurrWeather, currWeather]);
 
+	if (!city) {
+		return null;
+	}
+
 	if (!currWeather || !weatherDate) {
-		return <div>Loading...</div>;
+		return <div className="flex justify-center py-4">Loading...</div>;
 	}
 
 	return <WeatherItem weather={currWeather} date={weatherDate} />;

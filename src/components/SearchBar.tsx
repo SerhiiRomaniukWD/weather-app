@@ -13,7 +13,9 @@ import { UpdateWeatherBtn } from "./UpdateWeatherBtn.tsx";
 
 export const SearchBar: FC = () => {
 	const city = useCityStore((state) => state.city);
-	const [cityInput, setCityInput] = useState(`${city?.name}, ${city?.country}`);
+	const fullCity = city ? `${city.name}, ${city.country}` : "";
+
+	const [cityInput, setCityInput] = useState(fullCity);
 	const [suggestions, setSuggestions] = useState<CitySuggestion[]>([]);
 	const debouncedValue = useDebounce(cityInput, 300);
 	const setCity = useCityStore((state) => state.setCity);
