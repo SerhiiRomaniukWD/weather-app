@@ -10,6 +10,8 @@ export const WeatherGuard: FC = () => {
 	const city = useCityStore((state) => state.city);
 	const currWeather = useWeatherStore((state) => state.weather);
 	const setCurrWeather = useWeatherStore((state) => state.setWeather);
+	const weatherDate = useWeatherStore((state) => state.updateDate);
+	const setWeatherDate = useWeatherStore((state) => state.setUpdateDate);
 
 	const weatherService = useMemo(() => new WeatherService(), []);
 
@@ -32,12 +34,13 @@ export const WeatherGuard: FC = () => {
 			currWeather?.name !== city?.name
 		) {
 			fetchWeather();
+			setWeatherDate(Date.now());
 		}
-	}, [city, weatherService, setCurrWeather, currWeather]);
+	}, [city, weatherService, setCurrWeather, currWeather, setWeatherDate]);
 
-	if (!currWeather) {
+	if (!currWeather || !weatherDate) {
 		return <div>Loading...</div>;
 	}
 
-	return <WeatherItem weather={currWeather} />;
+	return <WeatherItem weather={currWeather} date={weatherDate} />;
 };

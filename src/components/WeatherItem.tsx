@@ -8,30 +8,21 @@ import HumidityIcon from "@icons/humidity.svg";
 
 import { ItemLayout } from "./ItemLayout";
 import WeatherIcon from "./WeatherIcon";
+import { TimeAgo } from "./TimeAgo";
 
 type Props = {
 	weather: WeatherData;
+	date: number;
 };
 
-const formatDate = (timestamp: number): string => {
-	const date = new Date(timestamp * 1000);
-	const options: Intl.DateTimeFormatOptions = {
-		day: "2-digit",
-		month: "long",
-		year: "numeric",
-	};
-	return date.toLocaleDateString("en-UK", options);
-};
-
-export const WeatherItem: FC<Props> = ({ weather }) => {
+export const WeatherItem: FC<Props> = ({ weather, date }) => {
 	const main = weather.weather[0];
-	const date = formatDate(weather.dt);
 
 	return (
 		<div className="flex flex-col gap-4">
 			<ItemLayout className="flex justify-between px-8 items-center">
 				<div className="">
-					<div className="mb-1 text-[12px]">{date}</div>
+					<TimeAgo date={date} />
 					<div className="mb-2 text-[16px] font-medium">{main.main}</div>
 					<div className="text-[40px] font-medium">
 						{Math.round(weather.main.temp)}°C
