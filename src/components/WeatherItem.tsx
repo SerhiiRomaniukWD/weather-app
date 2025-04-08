@@ -33,7 +33,9 @@ export const WeatherItem: FC<Props> = ({ weather }) => {
 				<div className="">
 					<div className="mb-1 text-[12px]">{date}</div>
 					<div className="mb-2 text-[16px] font-medium">{main.main}</div>
-					<div className="text-[40px] font-medium">{weather.main.temp}°C</div>
+					<div className="text-[40px] font-medium">
+						{Math.round(weather.main.temp)}°C
+					</div>
 				</div>
 
 				<WeatherIcon icon={main.icon} description={main.description} />

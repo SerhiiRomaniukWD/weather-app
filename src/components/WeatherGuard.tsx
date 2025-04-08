@@ -1,14 +1,15 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useMemo } from "react";
 
 import { useCityStore } from "../store/cityStore";
 
 import { WeatherService } from "../services/WeatherService";
-import { WeatherData } from "../types/weather";
 import { WeatherItem } from "./WeatherItem";
+import { useWeatherStore } from "../store/weatherStore";
 
 export const WeatherGuard: FC = () => {
 	const city = useCityStore((state) => state.city);
-	const [currWeather, setCurrWeather] = useState<WeatherData | null>(null);
+	const currWeather = useWeatherStore((state) => state.weather);
+	const setCurrWeather = useWeatherStore((state) => state.setWeather);
 
 	const weatherService = useMemo(() => new WeatherService(), []);
 
@@ -18,18 +19,18 @@ export const WeatherGuard: FC = () => {
 				return;
 			}
 
-			const weather = await weatherService.getWeatherByCoordinates(
-				city.lat,
-				city.lon
-			);
+			if (!currWeather) {
+				const weather = await weatherService.getWeatherByCoordinates(
+					city.lat,
+					city.lon
+				);
 
-			if (weather) {
 				setCurrWeather(weather);
 			}
 		};
 
 		fetchWeather();
-	}, [city, weatherService]);
+	}, [city, weatherService, setCurrWeather, currWeather]);
 
 	if (!currWeather) {
 		return <div>Loading...</div>;

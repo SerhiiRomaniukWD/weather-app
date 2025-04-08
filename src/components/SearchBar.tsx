@@ -1,8 +1,9 @@
 import { FC, FormEvent, useEffect, useMemo, useState } from "react";
 
 import { GeoService } from "../services/GeoService.ts";
-import { CitySuggestion } from "../types/geo.ts";
+import { useDebounce } from "../hooks/useDebounce.ts";
 import { useCityStore } from "../store/cityStore.ts";
+import { CitySuggestion } from "../types/geo.ts";
 
 import LocationIcon from "@icons/location.svg";
 
@@ -13,36 +14,34 @@ export const SearchBar: FC = () => {
 	const city = useCityStore((state) => state.city);
 	const [cityInput, setCityInput] = useState(`${city?.name}, ${city?.country}`);
 	const [suggestions, setSuggestions] = useState<CitySuggestion[]>([]);
+	const debouncedValue = useDebounce(cityInput, 300);
 	const setCity = useCityStore((state) => state.setCity);
 
 	const geoService = useMemo(() => new GeoService(), []);
 
 	const handleChange = (e: FormEvent<HTMLInputElement>) => {
-		setCity(null);
 		setCityInput(e.currentTarget.value);
 	};
 	const handleChooseCity = (city: CitySuggestion) => {
-		const cityFullName = `${city.name}, ${city.country}`;
-
 		setSuggestions([]);
+		setCityInput(`${city?.name}, ${city?.country}`);
 		setCity(city);
-		setCityInput(cityFullName);
 	};
 
 	useEffect(() => {
 		const fetchCitySuggestions = async () => {
-			if (cityInput.trim().length < 2) {
-				return;
-			}
-
-			if (!city) {
-				const cities = await geoService.getCitySuggestions(cityInput);
-				setSuggestions(cities);
-			}
+			const cities = await geoService.getCitySuggestions(debouncedValue);
+			setSuggestions(cities);
 		};
 
-		fetchCitySuggestions();
-	}, [cityInput, geoService, city]);
+		const fullCityString = `${city?.name}, ${city?.country}`;
+
+		if (debouncedValue !== fullCityString) {
+			fetchCitySuggestions();
+		}
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [debouncedValue, geoService]);
 
 	return (
 		<div className="relative h-fit">
